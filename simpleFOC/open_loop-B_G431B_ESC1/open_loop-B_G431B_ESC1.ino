@@ -18,7 +18,7 @@ void setup() {
   motor.linkDriver(&driver);
 
   motor.voltage_limit = 12;   // [V]
-  motor.velocity_limit = 30; // [rad/s] cca 50rpm
+  motor.velocity_limit = 40; // [rad/s] cca 50rpm
   motor.current_limit = 15;
   motor.controller = MotionControlType::angle_openloop;
 
