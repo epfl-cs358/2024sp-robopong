@@ -158,7 +158,7 @@ void loop()
         if (abs(prevValue0 - potentiometerValue0) > 0){
           moveMotor(0, potentiometerValue0, -1);
         }
-        delay(5);
+        delay(10);
         if (abs(prevValue1 - potentiometerValue1) > 0){
           moveMotor(1, potentiometerValue1, -1);
         }
