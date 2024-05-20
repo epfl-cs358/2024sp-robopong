@@ -50,6 +50,15 @@ void setup()
     serialMotor1.begin(115200);
 
     last = millis();
+
+    lcd.print("Waiting for");
+    lcd.setCursor(0, 1);
+    lcd.print("calibration");
+    lcd.setCursor(0, 0);
+
+    while (!Serial ) ;
+    
+    calibrateMotors();
 }
 
 int potentiometerValue0 = 0;
@@ -287,4 +296,102 @@ void playGame() {
       lcd.setCursor(2,0);
       lcd.print(String(right));
     }
+}
+
+void calibrateMotors(){
+    calibrateMotor0();
+}
+
+void calibrateMotor0(){
+  lcd.clear();
+      lcd.print("Calibrating");
+      lcd.setCursor(0, 1);
+      lcd.print("motor 0");
+      lcd.setCursor(0, 0);
+  float position = 0;
+  String command_received = "";
+  if (Serial.available() > 0) {
+    command_received = Serial.readStringUntil('\n');
+      
+  }
+  while (!command_received.equals("done")){
+    if (Serial.available() > 0) {
+      command_received = Serial.readStringUntil('\n');
+      command_received.trim();
+    }
+    
+    if (command_received.equals("up")){
+        position += 0.2;
+        serialMotor0.println("M" + String(position, 2) + " 40");
+        command_received = "";
+    }
+  }
+  maxLimitM0 = position;
+  position = 0;
+  command_received = "";
+  
+
+  while (!command_received.equals("done")){
+    if (Serial.available() > 0) {
+      command_received = Serial.readStringUntil('\n');
+      command_received.trim();
+    }
+    
+    if (command_received.equals("down")){
+        position -= 0.2;
+        serialMotor0.println("M" + String(position, 2) + " 40");
+        command_received = "";
+    }
+  }
+  minLimitM0 = position;
+  lcd.clear();
+
+  moveMotor(0, 512, 200);
+}
+
+void calibrateMotor1(){
+  lcd.clear();
+      lcd.print("Calibrating");
+      lcd.setCursor(0, 1);
+      lcd.print("motor 1");
+      lcd.setCursor(0, 0);
+  float position = 0;
+  String command_received = "";
+  if (Serial.available() > 0) {
+    command_received = Serial.readStringUntil('\n');
+      
+  }
+  while (!command_received.equals("done")){
+    if (Serial.available() > 0) {
+      command_received = Serial.readStringUntil('\n');
+      command_received.trim();
+    }
+    
+    if (command_received.equals("up")){
+        position += 0.2;
+        serialMotor1.println("M" + String(position, 2) + " 20");
+        command_received = "";
+    }
+  }
+  maxLimitM1 = position;
+  position = 0;
+  command_received = "";
+  
+
+  while (!command_received.equals("done")){
+    if (Serial.available() > 0) {
+      command_received = Serial.readStringUntil('\n');
+      command_received.trim();
+    }
+    
+    if (command_received.equals("down")){
+        position -= 0.2;
+        serialMotor1.println("M" + String(position, 2) + " 20");
+        command_received = "";
+    }
+  }
+  minLimitM1 = position;
+  lcd.clear();
+
+  moveMotor(1, 512, 200);
 }
