@@ -10,14 +10,17 @@
 SoftwareSerial serialMotor0(8, 9); // RX, TX
 SoftwareSerial serialMotor1(10, 11);
 
-float minLimitM0, minLimitM1 = -15.0;
-float maxLimitM0, maxLimitM1 = 15.0;
+float minLimitM0 = -15.0;
+float maxLimitM0 = 15.0;
+
+float minLimitM1 = -15.0;
+float maxLimitM1 = 15.0;
 
 long last = 0;
 
 LCD_I2C lcd(0x3F, 16, 2); // address can change, check wiring on github issue for connecting screen
-ezButton button1(6);  // next / player 1
-ezButton button2(7); // enter / player 2
+ezButton button1(6);  // next or player 1
+ezButton button2(7); // enter or player 2
 
 int curr;
 String states[] = {"automated", "single player", "two player"};
@@ -27,8 +30,8 @@ bool player1Ready = false;
 bool player2Ready = false;
 bool gameEnd = false;
 bool restart = false;
-int left = 0;
-int right = 0;
+int lScore= 0;
+int rScore = 0;
 
 
 void setup()
@@ -59,6 +62,7 @@ void setup()
     }
     
     calibrateMotors();
+    // lcd.clear();
 }
 
 int potentiometerValue0 = 0;
@@ -78,8 +82,6 @@ void loop()
     lcd.setCursor(0, 0);
   } 
 
-  // calibrate here?
-
 
   if (button2.isPressed()) {
     modeSelected = true;
@@ -98,23 +100,27 @@ void loop()
     }
   }
 
-  while (modeSelected && !player1Ready) {
+  while (modeSelected && (!player1Ready || !player2Ready) ) {
     button1.loop();
-    digitalWrite(LED_PIN_1, HIGH);
+    button2.loop();
+
     if (button1.isPressed()) {
       player1Ready = true;
+    } 
+    if (player1Ready) {
+      digitalWrite(LED_PIN_1, LOW);
+    } else {
+      digitalWrite(LED_PIN_1, HIGH);
+    }
+    if (button2.isPressed()) {
+      player2Ready = true;
+    } 
+    if (player2Ready) {
+      digitalWrite(LED_PIN_2, LOW);
+    } else {
+      digitalWrite(LED_PIN_2, HIGH);
     }
   }
-  
-  while (modeSelected && !player2Ready) {
-    button2.loop();
-    digitalWrite(LED_PIN_1, LOW);
-    digitalWrite(LED_PIN_2, HIGH);
-
-      if (button2.isPressed()) {
-        player2Ready = true;
-      }
-    }
   
   // game countdown
   if (player1Ready && player2Ready) {
@@ -129,58 +135,26 @@ void loop()
       delay(750);
     }
     lcd.clear();
-    lcd.print(String(left) + "-" + String(right));
+    lcd.print(String(lScore) + "-" + String(rScore));
     digitalWrite(LED_PIN_1, LOW);
     digitalWrite(LED_PIN_2, LOW);
   }
 
   // gameplay
-  while (player1Ready && player2Ready && left < 5 && right < 5) {
+  while (player1Ready && player2Ready && lScore < 5 && rScore < 5) {
+    String command_received = readCommand();
     if (curr == 2) {
-      if(millis()-last > 10){
-        potentiometerValue0 = analogRead(A0);
-        potentiometerValue1 = analogRead(A1);
-        
-        if (potentiometerValue0 == 1000) {
-          left += 1;
-          for (int i = 0; i < 5; i++) {
-            digitalWrite(LED_PIN_1, HIGH);
-            delay(100);
-            digitalWrite(LED_PIN_1, LOW);
-            delay(100);
-          }
-          lcd.setCursor(0,0);
-          lcd.print(String(left));
-        }
-        if (potentiometerValue1 == 1000) {
-          right += 1;
-          for (int i = 0; i < 5; i++) {
-            digitalWrite(LED_PIN_2, HIGH);
-            delay(100);
-            digitalWrite(LED_PIN_2, LOW);
-            delay(100);
-          }
-          lcd.setCursor(2,0);
-          lcd.print(String(right));
-        }
-
-        if (abs(prevValue0 - potentiometerValue0) > 0){
-          moveMotor(0, potentiometerValue0, -1);
-        }
-        delay(10);
-        if (abs(prevValue1 - potentiometerValue1) > 0){
-          moveMotor(1, potentiometerValue1, -1);
-        }
-      }
-
-      SerialBridge();
-    } else{
-      playGame();
+      twoPlayer(command_received);
+    } else if (curr == 1) {
+      singlePlayer(command_received);
+    } else {
+      automated(command_received);
     }
+    
   }
   
   // ending sequence
-  if (left == 5) {
+  if (lScore == 5) {
     gameEnd = true;
     lcd.setCursor(0,0);
     lcd.print("Player one wins");
@@ -192,7 +166,7 @@ void loop()
         digitalWrite(LED_PIN_1, LOW);
         delay(100);
     }
-  } else if (right == 5) {
+  } else if (rScore == 5) {
     gameEnd = true;
     lcd.setCursor(0,0);
     lcd.print("Player two wins");
@@ -220,25 +194,55 @@ void loop()
     gameEnd = false;
     restart = false;
     lcd.clear();
-    left = 0;
-    right = 0;
+    lScore = 0;
+    rScore = 0;
+    moveMotor(0, 512, 200);
+    moveMotor(1, 512, 200);
   }
 }
 
+void twoPlayer(String command_received) {
+  if(millis()-last > 10){
+    potentiometerValue0 = analogRead(A0);
+    potentiometerValue1 = analogRead(A1);
 
-void SerialBridge(){
-  if (Serial.available() > 0) {
-    String input = Serial.readStringUntil('\n');
-    
-    serialMotor0.println(input);
+    if (abs(prevValue0 - potentiometerValue0) > 0){
+      moveMotor(0, potentiometerValue0, 200);
+    }
+    delay(10);
+    if (abs(prevValue1 - potentiometerValue1) > 0){
+      moveMotor(1, potentiometerValue1, 200);
+    }
+  }
+  checkGoal(command_received);
+}
+
+void singlePlayer(String command_received){
+  if(millis()-last > 10){
+    potentiometerValue0 = analogRead(A0);
+
+    if (abs(prevValue0 - potentiometerValue0) > 0){
+      moveMotor(0, potentiometerValue0, 200);
+    }
   }
 
-  if (serialMotor0.available() > 0) {
-    String messageReceived = serialMotor0.readStringUntil('\n');
-    
-    Serial.print("Received: ");
-    Serial.println(messageReceived);
+  if (command_received.startsWith("game ")){
+      int motor = command_received.substring(5,6).toInt();
+      if (motor == 1) {
+        float command = command_received.substring(7).toFloat();
+        moveMotor(motor, command, 200);
+      }
   }
+  checkGoal(command_received);
+}
+
+void automated(String command_received) {
+  if (command_received.startsWith("game ")){
+      int motor = command_received.substring(5,6).toInt();
+      float command = command_received.substring(7).toFloat();
+      moveMotor(motor, command, 200);
+  }
+  checkGoal(command_received);
 }
 /*
  * id         : which motor we want to control, 0 or 1
@@ -263,6 +267,47 @@ void moveMotor(int id, float position, float speed){
   }
 }
 
+void SerialBridge(){
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n');
+    
+    serialMotor0.println(input);
+  }
+
+  if (serialMotor0.available() > 0) {
+    String messageReceived = serialMotor0.readStringUntil('\n');
+    
+    Serial.print("Received: ");
+    Serial.println(messageReceived);
+  }
+}
+
+void checkGoal(String command_received) {
+  if (command_received.startsWith("goal ")){
+    int id = command_received.substring(5,6).toInt();
+    if (id == 0) {
+      lScore += 1;
+      for (int i = 0; i < 5; i++) {
+        digitalWrite(LED_PIN_1, HIGH);
+        delay(100);
+        digitalWrite(LED_PIN_1, LOW);
+        delay(100);
+      }
+      lcd.setCursor(0,0);
+      lcd.print(String(lScore));
+    } else {
+      rScore += 1;
+      for (int i = 0; i < 5; i++) {
+        digitalWrite(LED_PIN_2, HIGH);
+        delay(100);
+        digitalWrite(LED_PIN_2, LOW);
+        delay(100);
+      }
+      lcd.setCursor(2,0);
+      lcd.print(String(rScore));
+    }
+  }
+}
 SoftwareSerial getMotorSerial(int id){
   if(id == 0){
     return serialMotor0;
@@ -285,38 +330,41 @@ void playGame() {
   while (Serial.available() == 0) {}
   String side = Serial.readString();
   side.trim();
-
-
-    if (side.equals("l")) {
-      left += 1;
-      for (int i = 0; i < 5; i++) {
-        digitalWrite(LED_PIN_1, HIGH);
-        delay(100);
-        digitalWrite(LED_PIN_1, LOW);
-        delay(100);
-      }
-      lcd.setCursor(0,0);
-      lcd.print(String(left));
-    } 
-    if (side.equals("r")) {
-      right += 1;
-      for (int i = 0; i < 5; i++) {
-        digitalWrite(LED_PIN_2, HIGH);
-        delay(100);
-        digitalWrite(LED_PIN_2, LOW);
-        delay(100);
-      }
-      lcd.setCursor(2,0);
-      lcd.print(String(right));
+  Serial.println(side);
+  if (side.equals("l")) {
+    lScore += 1;
+    for (int i = 0; i < 5; i++) {
+      digitalWrite(LED_PIN_1, HIGH);
+      delay(100);
+      digitalWrite(LED_PIN_1, LOW);
+      delay(100);
     }
+    lcd.setCursor(0,0);
+    lcd.print(String(lScore));
+  } 
+  if (side.equals("r")) {
+    rScore += 1;
+    for (int i = 0; i < 5; i++) {
+      digitalWrite(LED_PIN_2, HIGH);
+      delay(100);
+      digitalWrite(LED_PIN_2, LOW);
+      delay(100);
+    }
+    lcd.setCursor(2,0);
+    lcd.print(String(rScore));
+  }
 }
 
 void calibrateMotors(){
-  bool m0Down, m0Up, m1Down, m1Up = false;
+  bool m0Down = false;
+  bool m0Up = false;
+  bool m1Down = false;
+  bool m1Up = false;
   String command_received = "";
   String command = "";
   int motor = -1;
-  float position0, position1 = 0;
+  float position0 = 0;
+  float position1 = 0;
 
   lcd.clear();
   lcd.print("Calibrating");
@@ -324,7 +372,7 @@ void calibrateMotors(){
   lcd.print("motors");
   lcd.setCursor(0, 0);
 
-  while(m0Down && m0Up && m1Down && m1Up){
+  while(!(m0Down && m0Up && m1Down && m1Up)){
     command_received = readCommand();
 
     if (command_received.startsWith("cal ")){
@@ -383,6 +431,7 @@ void calibrateMotors(){
   }
 
   moveMotor(0, 512, -1);
+  delay(10);
   moveMotor(1, 512, -1);
   lcd.clear();
 }
@@ -394,14 +443,4 @@ String readCommand(){
       command_received.trim();
     }
     return command_received;
-}
-
-
-void CVPlayerExample(){
-  String command_received = readCommand();
-  if (command_received.startsWith("game ")){
-      int motor = command_received.substring(5,6).toInt();
-      float command = command_received.substring(7).toFloat();
-      moveMotor(motor, command, -1);
-  }
 }
