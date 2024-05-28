@@ -1,9 +1,8 @@
 ## Wiring
 ### Motors drivers
 #### Encoder
-![326759916-8e4414b6-f468-42d3-b0b5-9535e6a64daa](https://github.com/epfl-cs358/2024sp-robopong/assets/55513917/8a89a43a-dad3-49eb-bf74-22bd882c4506) [Schemtic from](https://hackaday.io/project/177578-b-g431b-esc-brushless-servo-controller/log/190978-encoders)
+![326759916-8e4414b6-f468-42d3-b0b5-9535e6a64daa](https://github.com/epfl-cs358/2024sp-robopong/assets/55513917/8a89a43a-dad3-49eb-bf74-22bd882c4506) [Schematic from](https://hackaday.io/project/177578-b-g431b-esc-brushless-servo-controller/log/190978-encoders)
 
-         +--------------------+       +----------------------+
 To connect the AS5600 encoder to the B-G431B-ESC1 motor drivers, we need to make the following connection :
 
          +--------------------+       +----------------------+
@@ -16,8 +15,8 @@ To connect the AS5600 encoder to the B-G431B-ESC1 motor drivers, we need to make
          +--------------------+       +----------------------+
 The pins on the AS5600 are well labeled
 #### Arduino
-To control the driver with an Arduino with Serial, we will need to use the RX/TX ports. We will also connect GND in order to have a shared ground and on one of the two drivers will be connect the 5V to the Vin of the arduibo in order to power the arduino.
-![326795159-361b4c3e-4f68-4188-b18f-7fbf75081d51](https://github.com/epfl-cs358/2024sp-robopong/assets/55513917/71b1a199-0911-48a2-8d9a-9b82a49c0b3c) [Schemtic from](https://www.st.com/resource/en/user_manual/um2516-electronic-speed-controller-discovery-kit-for-drones-with-stm32g431cb-stmicroelectronics.pdf)
+To control the driver with an Arduino with Serial, we will need to use the RX/TX ports. We will also connect GND in order to have a shared ground and on one of the two drivers will be connect the 5V to the VIN of the Arduino in order to power the arduino.
+![326795159-361b4c3e-4f68-4188-b18f-7fbf75081d51](https://github.com/epfl-cs358/2024sp-robopong/assets/55513917/71b1a199-0911-48a2-8d9a-9b82a49c0b3c) [Schematic from](https://www.st.com/resource/en/user_manual/um2516-electronic-speed-controller-discovery-kit-for-drones-with-stm32g431cb-stmicroelectronics.pdf)
 
          +--------------------+       +----------------------+
          |  B-G431B-ESC1      |       |     Arduino          |
@@ -38,9 +37,66 @@ To control the driver with an Arduino with Serial, we will need to use the RX/TX
          |           RX    <--+-------+--> TX (Pin 11)       |
          +--------------------+       +----------------------+
 #### Power and motor
-![326795266-6a96b532-8359-4901-882d-a318c4af6d5f](https://github.com/epfl-cs358/2024sp-robopong/assets/55513917/2fdbaf7d-fa63-475b-becb-0ab89f83412c) [Schemtic from](https://www.st.com/resource/en/user_manual/um2516-electronic-speed-controller-discovery-kit-for-drones-with-stm32g431cb-stmicroelectronics.pdf)
+![326795266-6a96b532-8359-4901-882d-a318c4af6d5f](https://github.com/epfl-cs358/2024sp-robopong/assets/55513917/2fdbaf7d-fa63-475b-becb-0ab89f83412c) [Schematic from](https://www.st.com/resource/en/user_manual/um2516-electronic-speed-controller-discovery-kit-for-drones-with-stm32g431cb-stmicroelectronics.pdf)
 To power the drivers, we connect respectively the V- and the V+ to the ground and the 12V of our powersupply.
-In our system, we are using some XT-60 connectors, on this connectors the flat side is the ground and the other with a sort of triangle is the +. Additionnaly we connect the femelle side to the power source.
+In our system, we are using some XT-60 connectors, on this connectors the flat side is the ground and the other with a sort of triangle is the +. Additionnaly we connect the female side to the power source.
 To be able to connect a single power source to the two motor drivers, we make a Y cable.
 
-To connect the motor to the driver, we do it by soldering 3 cables to the 3 big pads on the OUTPUT side.
+To connect the motor to the driver, we solder 3 cables to the 3 big pads on the OUTPUT side.
+
+### Potentiometers
+To control the motors manually, we need to connect two potentiometers to the Arduino. Both potentiometers send output through the analog pins. We use the following connection (the potentiometer pins are labeled 1-3):
+
+         +------------------------+       +----------------------+
+         |  Slide potentiometer 0 |       |       Arduino        |
+         |                        |       |                      | 
+         |                        |       |                      |
+         |          1          <--+-------+-->      GND          |
+         |          2          <--+-------+-->      A0           |
+         |          3          <--+-------+-->      5V           |
+         +------------------------+       +----------------------+
+
+         +------------------------+       +----------------------+
+         |  Slide potentiometer 1 |       |       Arduino        |
+         |                        |       |                      | 
+         |                        |       |                      |
+         |          1          <--+-------+-->      GND          |
+         |          2          <--+-------+-->      A1           |
+         |          3          <--+-------+-->      5V           |
+         +------------------------+       +----------------------+
+
+
+### Buttons and screen
+To allow the users to progress through the game flow, we need to connect two buttons (with corresponding LEDs) and an LCD screen. Both + and NC for the LED and button respectively utilize the digital pins. We use the following connections:
+
+         +---------------------+       +----------------------+
+         |       Button 0      |       |       Arduino        |
+         |   (next/player 0)   |       |                      | 
+         |                     |       |                      |
+         |     - (LED)      <--+-------+-->      GND          |
+         |     GND (BUTTON) <--+-------+-->      GND          |
+         |     + (LED)      <--+-------+-->      12           |
+         |     NC (BUTTON)  <--+-------+-->      6            |
+         +---------------------+       +----------------------+
+
+         +---------------------+       +----------------------+
+         |      Button 1       |       |       Arduino        |
+         |   (enter/player 1)  |       |                      | 
+         |                     |       |                      |
+         |     - (LED)      <--+-------+-->      GND          |
+         |     GND (BUTTON) <--+-------+-->      GND          |
+         |     + (LED)      <--+-------+-->      13           |
+         |     NC (BUTTON)  <--+-------+-->      7            |
+         +---------------------+       +----------------------+
+
+For the screen, we first solder the I2C converter to the back of the LCD screen, making sure the labeled 16 pins on the converter align with the correspondingly labeled holes on the screen. Then, we use the following connections:
+
+         +---------------------+       +----------------------+
+         |    I2C converter    |       |       Arduino        |
+         |                     |       |                      | 
+         |                     |       |                      |
+         |         GND      <--+-------+-->      GND          |
+         |         VCC      <--+-------+-->      5V           |
+         |         SDA      <--+-------+-->      SDA          |
+         |         SCL      <--+-------+-->      SCL          |
+         +---------------------+       +----------------------+
