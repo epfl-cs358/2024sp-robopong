@@ -224,21 +224,28 @@ void twoPlayer(String command_received) {
 }
 
 void singlePlayer(String command_received){
-  if(millis()-last > 10){
-    potentiometerValue0 = analogRead(A1);
-
-    if (abs(prevValue0 - potentiometerValue0) > 0){
-      moveMotor(0, potentiometerValue0, 200);
-    }
-  }
-
-  if (command_received.startsWith("game ")){
+    if (command_received.startsWith("game ")){
       int motor = command_received.substring(5,6).toInt();
-      if (motor == 1) {
+      if (motor == computerID) {
         float command = command_received.substring(7).toFloat();
         moveMotor(motor, command, 200);
       }
   }
+
+  if(millis()-last > 10){
+    if (computerID == 1) {
+      potentiometerValue0 = analogRead(A1);
+      if (abs(prevValue0 - potentiometerValue0) > 0){
+        moveMotor(0, potentiometerValue0, 200);
+      }
+    } else {
+      potentiometerValue1 = analogRead(A0);
+      if (abs(prevValue1 - potentiometerValue1) > 0){
+        moveMotor(1, potentiometerValue1, 200);
+      }
+    }
+  }
+
   checkGoal(command_received);
 }
 
@@ -292,7 +299,7 @@ void checkGoal(String command_received) {
   if (command_received.startsWith("goal ")){
     int id = command_received.substring(5,6).toInt();
     if (id == 0) {
-      lScore += 1;
+      rScore += 1;
       for (int i = 0; i < 5; i++) {
         digitalWrite(LED_PIN_1, HIGH);
         delay(100);
@@ -302,7 +309,7 @@ void checkGoal(String command_received) {
       lcd.setCursor(0,0);
       lcd.print(String(lScore));
     } else {
-      rScore += 1;
+      lScore += 1;
       for (int i = 0; i < 5; i++) {
         digitalWrite(LED_PIN_2, HIGH);
         delay(100);
