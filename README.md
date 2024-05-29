@@ -1,3 +1,18 @@
+## BOM
+- 2x b-g431b-esc1 motor driver
+- 2x br3536 1200kv brushless motor
+- 2x AS5600 magnetic encoder
+- Arduino Uno
+- 12V power supply
+- 2x slide potentiometer
+- LCD 16x2 screen
+- 2x buttons with led indicator
+- 2x bearings for supporting the motor
+- 4x bearings for the rail
+- 4x 8mm by 40cm metal rode for the rail
+- some belt
+- MDF
+
 ## Wiring
 ### Motors drivers
 #### Encoder
