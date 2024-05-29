@@ -2,8 +2,8 @@
 #include <LCD_I2C.h>
 #include <SoftwareSerial.h>
 
-#define LED_PIN_1 12
-#define LED_PIN_2 13
+#define LED_PIN_1 13
+#define LED_PIN_2 12
 
 #define STEP_INCREMENT 0.1  // Initial radian increment for searching limits
 
@@ -19,19 +19,19 @@ float maxLimitM1 = 15.0;
 long last = 0;
 
 LCD_I2C lcd(0x3F, 16, 2); // address can change, check wiring on github issue for connecting screen
-ezButton button1(6);  // next or player 1
-ezButton button2(7); // enter or player 2
+ezButton button1(7);  // next or player 1
+ezButton button2(6); // enter or player 2
 
 int curr;
 String states[] = {"automated", "single player", "two player"};
 bool modeSelected = false;
-// for single player mode, player1 always human and player2 always computer
 bool player1Ready = false;
 bool player2Ready = false;
 bool gameEnd = false;
 bool restart = false;
 int lScore= 0;
 int rScore = 0;
+int computerID = 0;
 
 
 void setup()
@@ -92,9 +92,7 @@ void loop()
 
   // players confirm ready
   if (modeSelected) {
-    if (curr == 1) {
-      player2Ready = true;
-    } else if (curr == 0) {
+    if (curr == 0) {
       player2Ready = true;
       player1Ready = true;
     }
@@ -106,6 +104,10 @@ void loop()
 
     if (button1.isPressed()) {
       player1Ready = true;
+      if (curr == 1) {
+        player2Ready = true;
+        computerID = 1;
+      }
     } 
     if (player1Ready) {
       digitalWrite(LED_PIN_1, LOW);
@@ -114,6 +116,10 @@ void loop()
     }
     if (button2.isPressed()) {
       player2Ready = true;
+      if (curr == 1) {
+        player1Ready = true;
+        computerID = 0;
+      }
     } 
     if (player2Ready) {
       digitalWrite(LED_PIN_2, LOW);
@@ -203,8 +209,8 @@ void loop()
 
 void twoPlayer(String command_received) {
   if(millis()-last > 10){
-    potentiometerValue0 = analogRead(A0);
-    potentiometerValue1 = analogRead(A1);
+    potentiometerValue0 = analogRead(A1);
+    potentiometerValue1 = analogRead(A0);
 
     if (abs(prevValue0 - potentiometerValue0) > 0){
       moveMotor(0, potentiometerValue0, 200);
@@ -219,7 +225,7 @@ void twoPlayer(String command_received) {
 
 void singlePlayer(String command_received){
   if(millis()-last > 10){
-    potentiometerValue0 = analogRead(A0);
+    potentiometerValue0 = analogRead(A1);
 
     if (abs(prevValue0 - potentiometerValue0) > 0){
       moveMotor(0, potentiometerValue0, 200);
