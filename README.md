@@ -115,3 +115,19 @@ For the screen, we first solder the I2C converter to the back of the LCD screen,
          |         SDA      <--+-------+-->      SDA          |
          |         SCL      <--+-------+-->      SCL          |
          +---------------------+       +----------------------+
+
+### Game and Computer Vision
+
+To play the game, we must first launch the Python computer vision code. The Arduino should be connected to COM5 on the laptop. If a different port is used, it can be easily changed in the first line of the main method. The camera must be connected to any USB port on the laptop.
+
+Once the code is launched, it starts by calibrating the camera: it first detects the four Aruco Markers and then computes the transformation matrix for the frame. Next, motor calibration takes place by detecting the red triangular-shaped paddles. The system sends "Go UP" and "Go DOWN" commands to the Arduino through the serial port. Once the boundaries are reached, a stop command is sent to the Arduino. This step is crucial to establish concrete bounds of the board and to save the zero and maximum positions of each motor.
+
+After reaching all four edges of the board, the code enters the main infinite loop of our algorithm. It detects the white ball and red paddles by color detection, predicts the trajectory of the ball, and then sends the motors to the correct positions at the right time to hit the ball in computer player mode. Concurrently, the algorithm checks if a goal has occurred by performing the following checks:
+
+If the ball is close enough to an edge, moving toward it, and then it is not visible for three consecutive frames, it is considered a goal.
+In the event of a goal, a "goal 0" or "goal 1" command is sent to the Arduino depending on which player scored.
+
+To exit the algorithm, press the 'q' button.
+
+![Game and Computer Vision](Pictures/CV.png "Computer Vision")
+
