@@ -160,7 +160,7 @@ Place the motor bearing and encoder in the 3D printed motor encoder holder as su
 ![2c66997f-9335-4c96-b54d-4510f0bba696](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/c2415854-73ac-40df-a6a8-e507c15acc6d)
 ![60660e97-f302-4b62-bc28-e89910602a5d 2](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/d1a75a11-ed16-4525-b3fe-19c520e3a477)
 
-Then place the motor encoder holder on top of the partially assembled motor system with encoder facing up to give the completed motor assembly:
+Then place the motor encoder holder on top of the magnet with encoder facing up to give the completed motor assembly:
 
 ![fbca97d7-b42d-43a9-8b6f-95b957662d91](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/dd35a1ec-4515-4338-839e-dd945d3301c7)
 
