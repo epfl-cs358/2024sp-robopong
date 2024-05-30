@@ -224,15 +224,16 @@ void twoPlayer(String command_received) {
 }
 
 void singlePlayer(String command_received){
-    if (command_received.startsWith("game ")){
+  checkGoal(command_received);
+
+  if (command_received.startsWith("game ")){
+    delay(20);
       int motor = command_received.substring(5,6).toInt();
       if (motor == computerID) {
         float command = command_received.substring(7).toFloat();
         moveMotor(motor, command, 200);
       }
-  }
-
-  if(millis()-last > 10){
+  } else if(millis()-last > 10){
     if (computerID == 1) {
       potentiometerValue0 = analogRead(A1);
       if (abs(prevValue0 - potentiometerValue0) > 0){
@@ -245,8 +246,6 @@ void singlePlayer(String command_received){
       }
     }
   }
-
-  checkGoal(command_received);
 }
 
 void automated(String command_received) {
@@ -307,7 +306,7 @@ void checkGoal(String command_received) {
         delay(100);
       }
       lcd.setCursor(0,0);
-      lcd.print(String(lScore));
+      lcd.print(String(rScore));
     } else {
       lScore += 1;
       for (int i = 0; i < 5; i++) {
@@ -317,7 +316,7 @@ void checkGoal(String command_received) {
         delay(100);
       }
       lcd.setCursor(2,0);
-      lcd.print(String(rScore));
+      lcd.print(String(lScore));
     }
   }
 }
