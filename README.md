@@ -148,12 +148,22 @@ To 3D print:
 First, assemble the game board shell using the laser cut walls as shown in the 3D model (exploded view in [cad/README.md](https://github.com/epfl-cs358/2024sp-robopong/tree/main/cad)). Leave the outermost walls on the left and right side to attach after motor assembly. 
 
 ### Motor system assembly
-To assemble the motor and belt system, first construct the motor reduction gear by cutting an appropriate length of belt and gluing it into the notch on the gear. Screw this gear on to the motor, followed by the magnet case with the magnet in it (this should be glued in place), followed by the motor encoder holder. Place the motor encoder into its holder.
+To assemble the motor and belt system, first construct the motor reduction gear by cutting an appropriate length of belt and gluing it into the groove in the gear, effectively adding teeth to the gear. Screw this gear on to the motor, followed by the magnet case with the magnet in it (this should be glued in place)
 
 
-<img width="185" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/d7228f6c-c6bb-432f-9afa-34a9aaf3bb82">
+![b9bc51b0-cb36-4b83-855d-d3c8be783bce 2](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/a8e5699c-a168-4244-902c-64d9c84ecf5b)
 
-<img width="133" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/3df32c89-8f19-4c25-b0d3-a7237de88b51">
+
+Place the motor bearing and encoder in the 3D printed motor encoder holder as such:
+
+
+![2c66997f-9335-4c96-b54d-4510f0bba696](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/c2415854-73ac-40df-a6a8-e507c15acc6d)
+![60660e97-f302-4b62-bc28-e89910602a5d 2](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/d1a75a11-ed16-4525-b3fe-19c520e3a477)
+
+Then place the motor encoder holder on top of the partially assembled motor system with encoder facing up to give the completed motor assembly:
+
+![fbca97d7-b42d-43a9-8b6f-95b957662d91](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/dd35a1ec-4515-4338-839e-dd945d3301c7)
+
 
 The motor can then be screwed into the base of the game board using the corresponding screw holes. Then, insert linear bearings into the appropriate clasps on each paddle mount print. Use screws (four per paddle mount) to tighten the linear rail clasps. 
 
