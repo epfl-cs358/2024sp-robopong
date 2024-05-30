@@ -1,3 +1,19 @@
+## BOM
+- 2x b-g431b-esc1 motor driver
+- 2x br3536 1200kv brushless motor
+- 2x AS5600 magnetic encoder
+- Arduino Uno
+- 12V power supply
+- 2x slide potentiometer
+- LCD 16x2 screen
+- Webcam Logitech C270
+- 2x buttons with led indicator
+- 2x bearings for supporting the motor
+- 4x bearings for the rail
+- 4x 8mm by 40cm metal rode for the rail
+- some belt
+- MDF
+
 ## Wiring
 ### Motors drivers
 #### Encoder
@@ -100,3 +116,20 @@ For the screen, we first solder the I2C converter to the back of the LCD screen,
          |         SDA      <--+-------+-->      SDA          |
          |         SCL      <--+-------+-->      SCL          |
          +---------------------+       +----------------------+
+
+### Game and Computer Vision
+
+To play the game, we must first launch the Python computer vision code. The Arduino should be connected to COM5 on the laptop. If a different port is used, it can be easily changed in the first line of the main method. The camera must be connected to any USB port on the laptop.
+
+Once the code is launched, it starts by calibrating the camera: it first detects the four Aruco Markers and then computes the transformation matrix for the frame. Next, motor calibration takes place by detecting the red triangular-shaped paddles. The system sends "Go UP" and "Go DOWN" commands to the Arduino through the serial port. Once the boundaries are reached, a stop command is sent to the Arduino. This step is crucial to establish concrete bounds of the board and to save the zero and maximum positions of each motor.
+
+After reaching all four edges of the board, the code enters the main infinite loop of our algorithm. It detects the white ball and red paddles by color detection, predicts the trajectory of the ball, and then sends the motors to the correct positions at the right time to hit the ball in computer player mode. Concurrently, the algorithm checks if a goal has occurred by performing the following checks:
+
+If the ball is close enough to an edge, moving toward it, and then it is not visible for three consecutive frames, it is considered a goal.
+In the event of a goal, a "goal 0" or "goal 1" command is sent to the Arduino depending on which player scored.
+
+To exit the algorithm, press the 'q' button.
+
+
+![CV](https://github.com/epfl-cs358/2024sp-robopong/assets/90309632/7c35c8de-7ec2-4e15-b59f-937b538845b6)
+
