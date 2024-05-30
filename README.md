@@ -129,7 +129,7 @@ To laser cut:
 
   
 To 3D print:
-- 2x paddles and paddle-rail attachments
+- 2x paddle-belt-rail system (includes one paddle mount, one paddle, two belt attachments)
 - Gutter system
 - 2x joystick rails and joystick
 - 6x wall liner in TPU
