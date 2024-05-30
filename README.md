@@ -126,6 +126,8 @@ To laser cut:
 - Box walls
 - 2x potentiometer case walls
 - Game board (from black plexiglass)
+
+  
 To 3D print:
 - 2x paddles and paddle-rail attachments
 - Gutter system
