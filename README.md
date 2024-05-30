@@ -154,7 +154,7 @@ Once wiring is complete, attach the Arduino Mega to its mount and secure the mou
 
 ### Game and Computer Vision
 
-To play the game, we must first launch the Python computer vision code. The Arduino should be connected to COM5 on the laptop. If a different port is used, it can be easily changed in the first line of the main method. The camera must be connected to any USB port on the laptop.
+To play the game, we must first launch the Python computer vision code. The Arduino should be connected to the laptop and adapt the port is used in the first line of the main method. Now it is on COM5. The camera must be connected to any USB port on the laptop.
 
 Once the code is launched, it starts by calibrating the camera: it first detects the four Aruco Markers and then computes the transformation matrix for the frame. Next, motor calibration takes place by detecting the red triangular-shaped paddles. The system sends "Go UP" and "Go DOWN" commands to the Arduino through the serial port. Once the boundaries are reached, a stop command is sent to the Arduino. This step is crucial to establish concrete bounds of the board and to save the zero and maximum positions of each motor.
 
