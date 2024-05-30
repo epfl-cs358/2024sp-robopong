@@ -12,8 +12,10 @@
 - 2x bearings for supporting the motor
 - 4x linear bearings
 - 4x 8mm by 40cm metal rails
-- some belt
+- Belt
 - MDF
+- Velcro
+- Metal rod for camera
 
 ## Wiring
 ### Motors drivers
@@ -118,6 +120,40 @@ For the screen, we first solder the I2C converter to the back of the LCD screen,
          |         SCL      <--+-------+-->      SCL          |
          +---------------------+       +----------------------+
 
+### General Assembly
+First, laser cut and 3D print the necessary parts.
+To laser cut:
+- Box walls
+- 2x potentiometer case walls
+- Game board (from black plexiglass)
+To 3D print:
+- 2x paddles and paddle-rail attachments
+- Gutter system
+- 2x joystick rails and joystick
+- 6x wall liner in TPU
+- 2x pulleys
+- 2x motor encoder case
+- 2x backing plates for buttons
+- 2x motor reduction gear
+- 2x magnet case
+- 2x rail holders
+- Arduino Mega mount
+- Power supply mount
+- Camera mount
+
+ADD STUFF ABOUT POWER SUPPLY
+
+First, assemble the game board shell using the laser cut walls as shown in the 3D model. Leave the outermost walls on the left and right side to attach after motor assembly. 
+To assemble the motor and belt system, first construct the motor reduction gear by cutting an appropriate length of belt and glueing it into the notch on the gear. Screw this gear on to the motor, followed by the magnet case with the magnet in it (should be glued in place), followed by the motor encoder holder. The motor can then be screwed into the base of the game board using the corresponding holes. Then, insert linear bearings into the appropriate holes on each paddle mount print. Use screws (four per paddle mount) to tighten the linear rail holders. Attach the belt to one end of the paddle mount by first placing a nut into the belt attachment location, pinching the belt into the notch, and placing a screw down the center. To insert the rails, first screw the rail holder into the side of the box with the corresponding screw holes. Push both rails through the rail holders, the paddle mount with linear bearings, and corresponding rail holes across the outside of the game board. Loop the belt around the pulley on the opposing side of the box from the motor and attach the belt to the paddle mount in the same way as the other side. The paddle mount should now be connected to the motor via the belt and should slide along the rails. Repeat on the other side. Then, wire the encoders and microcontrollers to the Arduino as shown above.
+
+To assemble the gameboard, first sand the plexiglass to prevent glare from interfering with the computer vision. Then, run the ARUCO marker generation script (`scripts/gen_aruco.py`) and print the four markers. Attach these to the sanded game board, ensuring that the detected corners align with the corners of the game board. Attach velcro strips along the walls of the gameboard as well as the TPU wall linings. Ensure that the fuzzy side of a velcro strip is attached on game board wall without the notches for inserting the game board to ensure that removal of the game board is possible in case the electronics need to be accessed. 
+
+On the front of the board, unscrew the binding ring on each button, insert the button through the hole in the front of the box, place the button backing behind it, and screw the ring back on, securing the buttons in place. Additionally, screw the screen into the screen mount and attach it to the top of the game board. Wire the screen and both buttons as mentioned above. On the back of the board, 
+
+To construct the joysticks, assemble the laser cut finger joint box and snap the bottom half of the joystick onto the slider. On the top plate, screw in both rails leaving one screw undone. Insert the slider between the rails, and secure the final screw. Then, attach the potentiometer to the joystick and screw the potentiometer into the top plate. Feed the potentiometer wires through the hole in the back plate, and connect to the Arduino as mentioned above. 
+
+Once wiring is complete, attach the Arduino Mega to its mount and secure the mount to the bottom of the board. Place the power supply brick in its mount and secure to the bottom of the board as well. Glue the gutter system together and fit it along the inside walls of the game box. The game board can now be inserted, the wall linings attached, and the product is ready to play. 
+
 ### Game and Computer Vision
 
 To play the game, we must first launch the Python computer vision code. The Arduino should be connected to COM5 on the laptop. If a different port is used, it can be easily changed in the first line of the main method. The camera must be connected to any USB port on the laptop.
@@ -133,4 +169,6 @@ To exit the algorithm, press the 'q' button.
 
 
 ![CV](https://github.com/epfl-cs358/2024sp-robopong/assets/90309632/7c35c8de-7ec2-4e15-b59f-937b538845b6)
+
+
 
