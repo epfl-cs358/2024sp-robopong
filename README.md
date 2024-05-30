@@ -6,6 +6,7 @@
 - 12V power supply
 - 2x slide potentiometer
 - LCD 16x2 screen
+- Webcam Logitech C270
 - 2x buttons with led indicator
 - 2x bearings for supporting the motor
 - 4x bearings for the rail
@@ -129,5 +130,6 @@ In the event of a goal, a "goal 0" or "goal 1" command is sent to the Arduino de
 
 To exit the algorithm, press the 'q' button.
 
-![Game and Computer Vision](Pictures/CV.png "Computer Vision")
+
+![CV](https://github.com/epfl-cs358/2024sp-robopong/assets/90309632/7c35c8de-7ec2-4e15-b59f-937b538845b6)
 
