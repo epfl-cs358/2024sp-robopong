@@ -184,7 +184,7 @@ To insert the rails, first screw the rail holder into the side of the box with t
 
 <img width="310" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/b3215e7b-6e87-4bed-84d4-d2ebe5ebd1cf">
 
-Continue pushing the rails through the paddle mount with linear bearings and the corresponding rail holes on the opposite side of the game board. Loop the belt around the motor reduction gear and pulley on the opposing side and attach the other end of the belt to the paddle mount with the belt attachmentsimilar to before. 
+Continue pushing the rails through the paddle mount with linear bearings and the corresponding rail holes on the opposite side of the game board. Loop the belt around the motor reduction gear and opposing pulley and attach the other end of the belt to the paddle mount with the belt attachment similar to before. 
 
 <img width="968" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/1dd267c8-50a2-4e04-913a-af48c3573032">
 
@@ -201,7 +201,12 @@ as this will ensure that the game board is able to be removed to access electron
 Glue the gutter system together as shown in the 3D model. Insert the entire gutter system into the game box.
 
 ### Peripherals
-Both buttons come with a plastic "nut" that holds the button together. On the front of the board, unscrew the nut on each button and insert the button through the hole in the front of the box. On the inside wall, place the button backing plate and screw the plastic nut back on. The button's nut should now be compressing both the backing plate and the frontmost panel of the game box, securing the buttons in place. Additionally, screw the screen into the screen mount and attach to the top of the game board. Wire the screen and both buttons as mentioned above. 
+Both buttons come with a plastic "nut" that holds the button together as seen here:
+
+<img width="334" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/aa8002bb-4b70-46b5-9dda-167e96bbe726">
+
+
+On the front of the board, unscrew the nut on each button and insert the button through the hole in the front of the box. On the inside wall, place the button backing plate and screw the plastic nut back on. The button's nut should now be compressing both the backing plate and the frontmost panel of the game box, securing the buttons in place. Additionally, screw the screen into the screen mount and attach to the top of the game board. Wire the screen and both buttons as mentioned above. 
 
 To construct the joysticks, first assemble the laser cut finger joint box. Then, snap the bottom half of the joystick onto the slider.
 
@@ -215,7 +220,7 @@ On the top plate, screw in both rails leaving one screw undone. Insert the slide
 
 <img width="425" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/f7583d82-614f-41b7-afa4-805d3afd1bbf">
 
-Then, attach the potentiometer to the joystick and screw the potentiometer into the top plate. Feed the potentiometer wires through the hole in the back plate, and connect to the Arduino as mentioned above. 
+Then, attach the potentiometer to the joystick and screw the potentiometer into the top plate. Feed the potentiometer wires through the hole in the back of the box, and connect to the Arduino as mentioned above. 
 
 For the camera, first insert the metal rod through the corresponding holes on the rear upper panel and bottom panel of the game box.
 
