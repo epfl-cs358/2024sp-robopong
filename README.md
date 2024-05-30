@@ -141,8 +141,6 @@ To 3D print:
 - Power supply mount
 - Camera mount
 
-ADD STUFF ABOUT POWER SUPPLY
-
 First, assemble the game board shell using the laser cut walls as shown in the 3D model. Leave the outermost walls on the left and right side to attach after motor assembly. 
 To assemble the motor and belt system, first construct the motor reduction gear by cutting an appropriate length of belt and glueing it into the notch on the gear. Screw this gear on to the motor, followed by the magnet case with the magnet in it (should be glued in place), followed by the motor encoder holder. The motor can then be screwed into the base of the game board using the corresponding holes. Then, insert linear bearings into the appropriate holes on each paddle mount print. Use screws (four per paddle mount) to tighten the linear rail holders. Attach the belt to one end of the paddle mount by first placing a nut into the belt attachment location, pinching the belt into the notch, and placing a screw down the center. To insert the rails, first screw the rail holder into the side of the box with the corresponding screw holes. Push both rails through the rail holders, the paddle mount with linear bearings, and corresponding rail holes across the outside of the game board. Loop the belt around the pulley on the opposing side of the box from the motor and attach the belt to the paddle mount in the same way as the other side. The paddle mount should now be connected to the motor via the belt and should slide along the rails. Repeat on the other side. Then, wire the encoders and microcontrollers to the Arduino as shown above.
 
