@@ -2,15 +2,16 @@
 - 2x b-g431b-esc1 motor driver
 - 2x br3536 1200kv brushless motor
 - 2x AS5600 magnetic encoder
-- Arduino Uno
+- Arduino Mega
 - 12V power supply
-- 2x slide potentiometer
+- 2x slide potentiometers
 - LCD 16x2 screen
+- I2C converter
 - Webcam Logitech C270
-- 2x buttons with led indicator
+- 2x buttons with LED
 - 2x bearings for supporting the motor
-- 4x bearings for the rail
-- 4x 8mm by 40cm metal rode for the rail
+- 4x linear bearings
+- 4x 8mm by 40cm metal rails
 - some belt
 - MDF
 
