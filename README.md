@@ -272,13 +272,16 @@ Attach the camera to the printed hinge mount and push this mount onto the top of
 
 Once all wiring is complete, attach the Arduino Mega to its mount and secure the mount to the bottom of the board. Place the power supply brick in its mount and secure to the bottom of the board as well. Glue the gutter system together and fit it along the inside walls of the game box and attach the collection bowl to the front of the box. The game board can now be inserted, the wall linings attached, paddles clipped in, and the product is ready to play. 
 
-### Game and Computer Vision
+##Software
+To run the project, we have to upload the [gameplay code](https://github.com/epfl-cs358/2024sp-robopong/blob/main/gameplay/gameplay.ino) to the arduino Mega board, the [driver code](https://github.com/epfl-cs358/2024sp-robopong/blob/main/simpleFOC/closed_loop-B_G431B_ESC1_AS5600/closed_loop-B_G431B_ESC1_AS5600.ino) to the two drivers (making sure to have the delay set at the beginning of the setup for one, but not the other driver in order to reduce the current peak during setup) and the [computer vision code](https://github.com/epfl-cs358/2024sp-robopong/blob/main/computer_vision/Computer_Vision.py) that run on a computer.
+
+## Game and Computer Vision
 
 To play the game, we must first launch the Python computer vision code. The Arduino should be connected to the laptop, and the port used should be specified in the first line of the main method. The camera must be connected to any USB port on the laptop.
 
 Once the code is launched, it starts by calibrating the camera: it first detects the four Aruco Markers and then computes the transformation matrix for the frame. Next, motor calibration takes place by detecting the red triangular-shaped paddles. The system sends "Go UP" and "Go DOWN" commands to the Arduino through the serial port. Once the boundaries are reached, a stop command is sent to the Arduino. This step is crucial to establish concrete bounds of the board and to save the zero and maximum positions of each motor.
 
-After reaching all four edges of the board, the code enters the main infinite loop of our algorithm. It detects the white ball and red paddles by color detection, predicts the trajectory of the ball, and then sends the motors to the correct positions at the right time to hit the ball in computer player mode. Concurrently, the algorithm checks if a goal has occurred by performing the following checks:
+After reaching all four edges of the board, the code enters the main infinite loop of our algorithm. It detects the blue ball and red paddles by color detection, predicts the trajectory of the ball, and then sends the motors to the correct positions at the right time to hit the ball in computer player mode. Concurrently, the algorithm checks if a goal has occurred by performing the following checks:
 
 If the ball is close enough to an edge, moving toward it, and then it is not visible for three consecutive frames, it is considered a goal.
 In the event of a goal, a "goal 0" or "goal 1" command is sent to the Arduino depending on which player scored.
