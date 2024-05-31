@@ -172,7 +172,7 @@ To 3D print for the [main box](https://github.com/epfl-cs358/2024sp-robopong/tre
 - C270 camera mount
 - Screen mount
 
-To laser cut for the each [potentiometer](https://github.com/epfl-cs358/2024sp-robopong/tree/main/cad/joystick):
+To laser cut for each [potentiometer](https://github.com/epfl-cs358/2024sp-robopong/tree/main/cad/joystick):
 - Joystick case walls
 
 To 3D print for each [potentiometer](https://github.com/epfl-cs358/2024sp-robopong/tree/main/cad/joystick):
