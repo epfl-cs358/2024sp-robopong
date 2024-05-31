@@ -35,21 +35,19 @@ void setup() {
   motor.PID_velocity.P = 0.2;
   motor.PID_velocity.I = 20;
   motor.PID_velocity.D = 0.001;
-  motor.PID_velocity.output_ramp = 2000;
+  motor.PID_velocity.output_ramp = 1000;
   motor.LPF_velocity.Tf = 0.01;
   
   Serial.begin(115200);
 
   motor.useMonitoring(Serial);
 
-  //motor.zero_electric_angle = 1.07;
   motor.sensor_direction = Direction::CW;
 
   motor.sensor_offset = 0;
+  motor.target = 0;
   motor.voltage_sensor_align = 6;
 
-
-  //motor.target = 0;
 
   motor.init();
   motor.initFOC();

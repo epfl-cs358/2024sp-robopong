@@ -5,7 +5,7 @@
 #define LED_PIN_1 13
 #define LED_PIN_2 12
 
-#define STEP_INCREMENT 0.1  // Initial radian increment for searching limits
+#define STEP_INCREMENT 0.05  // Initial radian increment for searching limits
 
 SoftwareSerial serialMotor0(8, 9); // RX, TX
 SoftwareSerial serialMotor1(10, 11);
@@ -163,7 +163,7 @@ void loop()
   if (lScore == 5) {
     gameEnd = true;
     lcd.setCursor(0,0);
-    lcd.print("Player one wins");
+    lcd.print("Player two wins");
     lcd.setCursor(0,1);
     lcd.print("Continue?");
     for (int i = 0; i <10; i++) {
@@ -175,7 +175,7 @@ void loop()
   } else if (rScore == 5) {
     gameEnd = true;
     lcd.setCursor(0,0);
-    lcd.print("Player two wins");
+    lcd.print("Player one wins");
     lcd.setCursor(0,1);
     lcd.print("Continue?");
     for (int i = 0; i < 10; i++) {
@@ -395,11 +395,11 @@ void calibrateMotors(){
     if(command.equals("up")){
       if (motor == 0) {
         position0 += STEP_INCREMENT;
-        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position0, 40));
+        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position0, 100));
       }
       else if (motor == 1) {
         position1 += STEP_INCREMENT;
-        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position1, 40));
+        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position1, 100));
       }
       command_received = "";
       command = "";
@@ -407,11 +407,11 @@ void calibrateMotors(){
     else if (command.equals("down")){
       if (motor == 0) {
         position0 -= STEP_INCREMENT;
-        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position0, 40));
+        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position0, 100));
       }
       else if (motor == 1) {
         position1 -= STEP_INCREMENT;
-        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position1, 40));
+        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position1, 100));
       }
       command_received = "";
       command = "";
@@ -442,9 +442,9 @@ void calibrateMotors(){
     }
   }
 
-  moveMotor(0, 512, -1);
+  moveMotor(0, 512, 200);
   delay(10);
-  moveMotor(1, 512, -1);
+  moveMotor(1, 512, 200);
   lcd.clear();
 }
 
