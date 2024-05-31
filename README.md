@@ -4,14 +4,15 @@ The core concept of our project is a physical version of the classic Pong arcade
 
 ![IMG_5691](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/9d65ba61-5313-46fd-a4ce-df720bc59652)
 
-![IMG_5692](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/24bbc6af-9591-4af3-b379-3fa6fdb7a269)
+![IMG_5692](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/10af4c05-d0db-47e1-8a34-878e2bd75c66)
+
 
 ### Authors
-[Amene Gafsi](https://github.com/Amene-Gafsi)
-[Connor Grant](https://github.com/cgrant0)
-[Célien Müller](https://github.com/cemuelle)
-[Jonathan Shu](https://github.com/jonathanshu87)
-[Andrew Yatzkan](https://github.com/AndrewYatzkan)
+- [Amene Gafsi](https://github.com/Amene-Gafsi)
+- [Connor Grant](https://github.com/cgrant0)
+- [Célien Müller](https://github.com/cemuelle)
+- [Jonathan Shu](https://github.com/jonathanshu87)
+- [Andrew Yatzkan](https://github.com/AndrewYatzkan)
 
 
 
@@ -223,7 +224,8 @@ Attach velcro strips along the back and front walls of the game board as well as
 ### Gutters
 Glue the gutter system together as shown in the 3D model. Insert the entire gutter system into the game box.
 
-![IMG_5700](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/923d7bf1-f163-4b32-ac31-b90dd87e97f4)
+![IMG_5700](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/80c475c5-bf00-4fac-8c4f-18a069414f42)
+
 
 
 ### Peripherals
