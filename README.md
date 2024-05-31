@@ -152,8 +152,12 @@ To laser cut:
 
   
 To 3D print:
-- 2x paddle-belt-rail system (includes one paddle mount, one paddle, two belt attachments, make sure top of paddle is red everything else is black)
+- 2x paddle-belt-rail attachment system
+         - paddle load bearing mount
+         - paddle (ensure top of paddle is red, everything else is black)
+         - 2x belt attachments
 - Gutter system
+- Collection bowl
 - 2x joystick rails and joystick
 - 6x wall liner in black TPU
 - 2x pulleys
@@ -266,7 +270,7 @@ For the camera, first insert the metal rod through the corresponding holes on th
 
 Attach the camera to the printed hinge mount and push this mount onto the top of the metal rod. Secure the rod in place.
 
-Once all wiring is complete, attach the Arduino Mega to its mount and secure the mount to the bottom of the board. Place the power supply brick in its mount and secure to the bottom of the board as well. Glue the gutter system together and fit it along the inside walls of the game box. The game board can now be inserted, the wall linings attached, paddles clipped in, and the product is ready to play. 
+Once all wiring is complete, attach the Arduino Mega to its mount and secure the mount to the bottom of the board. Place the power supply brick in its mount and secure to the bottom of the board as well. Glue the gutter system together and fit it along the inside walls of the game box and attach the collection bowl to the front of the box. The game board can now be inserted, the wall linings attached, paddles clipped in, and the product is ready to play. 
 
 ### Game and Computer Vision
 
