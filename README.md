@@ -1,3 +1,20 @@
+## Robopong
+
+The core concept of our project is a physical version of the classic Pong arcade game, where users bounce a ball back and forth with paddles while attempting to score goals by hitting the ball past the opposing player's paddle. Along with the regular two-player mode, we integrated computer vision into our project, providing the option of single player against a computer opponent, or a completely automated game.
+
+![IMG_5691](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/9d65ba61-5313-46fd-a4ce-df720bc59652)
+
+![IMG_5692](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/24bbc6af-9591-4af3-b379-3fa6fdb7a269)
+
+### Authors
+[Amene Gafsi](https://github.com/Amene-Gafsi)
+[Connor Grant](https://github.com/cgrant0)
+[Célien Müller](https://github.com/cemuelle)
+[Jonathan Shu](https://github.com/jonathanshu87)
+[Andrew Yatzkan](https://github.com/AndrewYatzkan)
+
+
+
 ## BOM
 - 2x b-g431b-esc1 motor driver
 - 2x br3536 1200kv brushless motor
@@ -129,10 +146,10 @@ To laser cut:
 
   
 To 3D print:
-- 2x paddle-belt-rail system (includes one paddle mount, one paddle, two belt attachments)
+- 2x paddle-belt-rail system (includes one paddle mount, one paddle, two belt attachments, make sure top of paddle is red everything else is black)
 - Gutter system
 - 2x joystick rails and joystick
-- 6x wall liner in TPU
+- 6x wall liner in black TPU
 - 2x pulleys
 - 2x motor encoder case
 - 2x backing plates for buttons
@@ -167,8 +184,8 @@ Then place the motor encoder holder on top of the magnet with encoder facing up 
 
 The motor can then be screwed into the base of the game board using the corresponding screw holes. Then, insert linear bearings into the appropriate clasps on each paddle mount print. Use screws (four per paddle mount) to tighten the linear rail clasps. 
 
-<img width="341" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/5ab42a3d-71e6-4be4-87eb-d1c89c6c3f4a">
-<img width="257" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/fc83de0e-23ce-4d74-ba31-5f218d621d33">
+
+![IMG_5693](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/61429089-d189-4407-974f-7e03754eb461)
 
 
 Screw the belt attachments onto the paddle mount and attach the belt to one end by first placing a nut into the hexagonal indent on the belt attachment
@@ -186,19 +203,28 @@ To insert the rails, first screw the rail holder into the side of the box with t
 
 Continue pushing the rails through the paddle mount with linear bearings and the corresponding rail holes on the opposite side of the game board. Loop the belt around the motor reduction gear and opposing pulley and attach the other end of the belt to the paddle mount with the belt attachment similar to before. 
 
-<img width="968" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/1dd267c8-50a2-4e04-913a-af48c3573032">
+![IMG_5697](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/92d9592b-a03e-4a8a-a4d6-5f93776a6622)
+
 
 The paddle mount should now be connected to the motor via the belt and should slide along the rails. Repeat on the other side. Then, wire the encoders and microcontrollers to the Arduino as shown above.
 
 ### Game board assembly
-To assemble the game board, first sand the plexiglass to prevent glare from interfering with the computer vision. Then, run the ARUCO marker generation script (`scripts/gen_aruco.py`) and print the four markers. Attach these to the sanded game board, making sure that the detected corners align with the corners of the game board. Attach velcro strips along the back and front walls of the game board as well as the TPU wall linings. Ensure that the furry side of a velcro strip is attached on the back wall of the game board
+To assemble the game board, first sand the plexiglass to prevent glare from interfering with the computer vision. Then, run the ARUCO marker generation script (`scripts/gen_aruco.py`) and print the four markers. Attach these to the sanded game board, making sure that the detected corners align with the corners of the game board. 
 
-<img width="728" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/6b381caf-af8b-4eb4-b1bd-d83de4ba6092">
+![IMG_5698](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/6e4ad5b3-19fc-4873-9a91-bbe76c654cce)
 
-as this will ensure that the game board is able to be removed to access electronics.
+
+Attach velcro strips along the back and front walls of the game board as well as the TPU wall linings. Ensure that the furry side of a velcro strip is attached on the back wall of the game board as this will ensure that the game board is able to be removed to access electronics.
+
+![IMG_5699](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/da8de128-17ed-4ffd-aad6-6a5179d24724)
+
+
 
 ### Gutters
 Glue the gutter system together as shown in the 3D model. Insert the entire gutter system into the game box.
+
+![IMG_5700](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/923d7bf1-f163-4b32-ac31-b90dd87e97f4)
+
 
 ### Peripherals
 Both buttons come with a plastic "nut" that holds the button together as seen here:
@@ -206,7 +232,12 @@ Both buttons come with a plastic "nut" that holds the button together as seen he
 <img width="334" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/aa8002bb-4b70-46b5-9dda-167e96bbe726">
 
 
-On the front of the board, unscrew the nut on each button and insert the button through the hole in the front of the box. On the inside wall, place the button backing plate and screw the plastic nut back on. The button's nut should now be compressing both the backing plate and the frontmost panel of the game box, securing the buttons in place. Additionally, screw the screen into the screen mount and attach to the top of the game board. Wire the screen and both buttons as mentioned above. 
+On the front of the board, unscrew the nut on each button and insert the button through the hole in the front of the box. On the inside wall, place the button backing plate and screw the plastic nut back on. The button's nut should now be compressing both the backing plate and the frontmost panel of the game box, securing the buttons in place.
+
+![IMG_5701](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/fd3f0ffa-4797-49d9-85c9-824a471c966e)
+
+
+Additionally, screw the screen into the screen mount and attach to the top of the game board. Wire the screen and both buttons as mentioned above. 
 
 To construct the joysticks, first assemble the laser cut finger joint box. Then, snap the bottom half of the joystick onto the slider.
 
@@ -228,7 +259,7 @@ For the camera, first insert the metal rod through the corresponding holes on th
 
 Attach the camera to the printed hinge mount and push this mount onto the top of the metal rod. Secure the rod in place.
 
-Once all wiring is complete, attach the Arduino Mega to its mount and secure the mount to the bottom of the board. Place the power supply brick in its mount and secure to the bottom of the board as well. Glue the gutter system together and fit it along the inside walls of the game box. The game board can now be inserted, the wall linings attached, and the product is ready to play. 
+Once all wiring is complete, attach the Arduino Mega to its mount and secure the mount to the bottom of the board. Place the power supply brick in its mount and secure to the bottom of the board as well. Glue the gutter system together and fit it along the inside walls of the game box. The game board can now be inserted, the wall linings attached, paddles clipped in, and the product is ready to play. 
 
 ### Game and Computer Vision
 
