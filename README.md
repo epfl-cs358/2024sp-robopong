@@ -138,6 +138,11 @@ For the screen, we first solder the I2C converter to the back of the LCD screen,
          |         SCL      <--+-------+-->      SCL          |
          +---------------------+       +----------------------+
 
+To make wiring easier, we chose to use a shield board.
+
+![5acc8154-722d-4b54-9d1e-df4f039b3db4](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/e97f2276-25ff-4426-874b-0608283bf3bf)
+![bfca6097-a0ba-450b-9a1a-296cc2c2c26b](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/32b3e382-9a7a-4768-a2ce-2b6134b51dc3)
+
 ## General Assembly
 First, laser cut and 3D print the necessary parts.
 To laser cut:
