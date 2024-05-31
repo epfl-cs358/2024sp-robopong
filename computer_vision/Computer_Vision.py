@@ -9,24 +9,20 @@ import cv2
 # Constants
 board_bottom_limit = 450
 ball_radius_lower = 5
-move_urgent_time = 0.3
+move_urgent_time = 0.35
 paddle_min_area = 10
 board_top_limit = 41
 
 # not touch
-redRange = [(160, 50, 50), (180, 255, 255)] # day
-# redRange = [(140, 30, 50), (180, 255, 255)]  # afternoon
-# redRange = [(0, 75, 75), (180, 255, 255)]  # night
+redRange = [(160, 50, 50), (180, 255, 255)] # paddles
+blueRange = [(40, 150, 200), (100, 255, 255)] # ball
 
-# whiteRange = [(20, 40, 100), (89, 200, 200)]
-whiteRange = [(0, 0, 252), (180, 10, 255)]
 
 paddle0_pts = deque(maxlen=64)
 paddle1_pts = deque(maxlen=64)
 ball_pts = deque(maxlen=64)
 transformation_matrix = None
 pixel_to_motor_coords = 0
-coordinates_sent = (-1, -1)
 position_sent = False
 direction = -1
 board_center = 0
@@ -35,7 +31,7 @@ width = 0
 height = 0
 
 def main():
-    ser = serial.Serial('COM5', 115200)
+    ser = serial.Serial('COM4', 115200)
     cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) 
     frame = camera_on(cap)
     if frame is None:
@@ -64,6 +60,8 @@ def calibrate_camera(cap, ser):
     motor1_moved = False
     time0 = 0
     time1 = 0
+    check_again = 0
+
     global transformation_matrix
     # Define destination points (corners of the image)
     dst_points = np.float32([
@@ -101,43 +99,34 @@ def calibrate_camera(cap, ser):
             cv2.imshow("frame", transformed_frame)
             break
         else:
-            if last_known_positions[1] is None and not motor0_moved:
-                while time0 < 100:
-                    # ser.write(f"cal 0 up\n".encode())
-                    time0 += 1
-                motor0_moved = True
-            elif last_known_positions[4] is None and not motor0_moved:
-                while time0 < 100:
-                    # ser.write(f"cal 0 down\n".encode())
-                    time0 += 1
-                motor0_moved = True
-            if last_known_positions[3] is None and not motor1_moved:
-                while time1 < 100:
-                    # ser.write(f"cal 1 up\n".encode())
-                    time1 += 1
-                motor1_moved = True
-            elif last_known_positions[2] is None and not motor1_moved:
-                while time1 < 100:
-                    # ser.write(f"cal 1 down\n".encode())
-                    time1 += 1
-                motor1_moved = True
+            if check_again >= 30 :
+                if last_known_positions[1] is None and not motor0_moved:
+                    while time0 < 100:
+                        ser.write(f"cal 0 down\n".encode())
+                        time0 += 1
+                    motor0_moved = True
+                if last_known_positions[4] is None and not motor0_moved:
+                    while time0 < 100:
+                        ser.write(f"cal 0 up\n".encode())
+                        time0 += 1
+                    motor0_moved = True
+                if last_known_positions[3] is None and not motor1_moved:
+                    while time1 < 100:
+                        ser.write(f"cal 1 down\n".encode())
+                        time1 += 1
+                    motor1_moved = True
+                if last_known_positions[2] is None and not motor1_moved:
+                    while time1 < 100:
+                        ser.write(f"cal 1 up\n".encode())
+                        time1 += 1
+                    motor1_moved = True
+            check_again += 1
 
         cv2.imshow("Original", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     if cv2.getWindowProperty('Original', cv2.WND_PROP_VISIBLE) >= 1:
         cv2.destroyAllWindows()
-
-def create_transformation_matrix(src_points, dst_points):
-    """Create a perspective transformation matrix from src_points to dst_points."""
-    return cv2.getPerspectiveTransform(src_points, dst_points)
-
-def move_motor(ser, direction, position):
-    if position < 0:
-        position = 0
-    elif position > 1023:
-        position = 1023
-    ser.write(f"game {direction} {position}\n".encode())
 
 def calibrate_paddles(cap, ser):
     paddle0_up = False
@@ -181,10 +170,9 @@ def calibrate_paddles(cap, ser):
         if left_paddle_center is not None:
             paddle0_pts.appendleft(left_paddle_center)
         if len(paddle0_pts)>0 and not paddle0_done:
-            print(paddle0_pts[0][1])
-            if paddle0_pts[0][1] > board_top_limit+10 and not paddle0_up:
+            if paddle0_pts[0][1] > board_top_limit and not paddle0_up:
                 ser.write(f"cal 0 up\n".encode())
-            elif paddle0_pts[0][1] <= board_top_limit+10 and not paddle0_up:
+            elif paddle0_pts[0][1] <= board_top_limit and not paddle0_up:
                 ser.write(f"cal 0 done up\n".encode())
                 paddle0_up = True
             elif paddle0_pts[0][1] < board_bottom_limit and not paddle0_down:
@@ -211,68 +199,6 @@ def calibrate_paddles(cap, ser):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break   
 
-def predict_and_draw_trajectory(frame, ball_pts, ser):
-    global direction, position_sent, coordinates_sent
-    corner_marge = 100
-    filtered_pts = []
-    if len(ball_pts) < 2:
-        return    
-    last_time, last_pos = ball_pts[0]
-    filtered_pts.append((last_time, last_pos))    
-    for time, pos in ball_pts:
-        if last_time - time >= 0.1:
-            filtered_pts.append((time, pos))
-            last_time = time
-    if len(filtered_pts) < 2:
-        return
-    (time2, (x2, y2)), (time1, (x1, y1)) = filtered_pts[0], filtered_pts[1]
-    dx = x2 - x1
-    dy = y2 - y1
-    dt = time2 - time1
-    if dt == 0 or (abs(dx) < 5):
-        return 
-    if (dx < 0 and direction == 1) or (dx > 0 and direction == 0):
-        direction = 1 if dx > 0 else 0
-        position_sent = False
-        ball_pts.clear()
-        return
-    elif (direction == -1):
-        direction = 1 if dx > 0 else 0
-    vx = dx / dt
-    vy = dy / dt
-    if vx == 0 and vy == 0:
-        return 
-    t_left = t_right = t_top = t_bottom = float('inf')
-    if vx != 0:
-        if vx > 0:
-            t_right = (width - x2) / vx
-        else:
-            t_left = -x2 / vx
-    if vy != 0:
-        if vy > 0:
-            t_bottom = (height - y2) / vy
-        else:
-            t_top = -y2 / vy
-    t_min = min(filter(lambda t: t > 0, [t_left, t_right, t_top, t_bottom]))
-    final_x = x2 + int(vx * t_min)
-    final_y = y2 + int(vy * t_min)
-    # final_x = max(0, min(width, final_x))
-    final_y = max(0, min(height, final_y))
-    # if final_y <= board_center and t_min > move_urgent_time + 0.1:
-    #     ser.write(f"game {direction} {200}\n".encode())
-    # elif final_y > board_center and t_min > move_urgent_time + 0.1:
-    #     ser.write(f"game {direction} {800}\n".encode())
-    if not position_sent and (final_x <= 0 + corner_marge or final_x >= width - corner_marge):
-        if direction == 1:
-            motor_position = int(final_y * pixel_to_motor_coords)
-        else: 
-            motor_position = int((height-final_y) * pixel_to_motor_coords)
-        cv2.line(frame, (x2, y2), (final_x, final_y), (255, 0, 0), 2)
-        if (t_min <= move_urgent_time) and (coordinates_sent[0] != direction or abs(coordinates_sent[1]- motor_position) >20):
-            move_motor(ser, direction, motor_position)
-            coordinates_sent = (direction, motor_position)
-            position_sent = True
-    
 def track_ball_and_paddles(cap, ser):
     global goal_sent
     ball_missing_count = 0
@@ -286,7 +212,7 @@ def track_ball_and_paddles(cap, ser):
             frame = cv2.warpPerspective(frame, transformation_matrix, (width, height))
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
-        ball_mask = cv2.inRange(hsv, whiteRange[0], whiteRange[1])
+        ball_mask = cv2.inRange(hsv, blueRange[0], blueRange[1])
         ball_mask = cv2.erode(ball_mask, None, iterations=2)
         ball_mask = cv2.dilate(ball_mask, None, iterations=2)
         ball_cnts = cv2.findContours(ball_mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -329,29 +255,112 @@ def track_ball_and_paddles(cap, ser):
             paddle0_pts.appendleft(left_paddle_center)
         if right_paddle_center is not None:
             paddle1_pts.appendleft(right_paddle_center)
-        if ball_missing_count >= missing_threshold and not goal_sent:
-            goal(ball_pts, ser)
         if len(ball_pts)>1 and ball_visible:
-            predict_and_draw_trajectory(frame, ball_pts, ser)
+            predict_and_draw_trajectory(frame, ball_pts, ser, paddle0_pts, paddle1_pts)
+        if not goal_sent and ball_missing_count >= missing_threshold:
+            goal(ball_pts, ser)
         cv2.imshow("frame", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cap.release()
     cv2.destroyAllWindows()
 
+def predict_and_draw_trajectory(frame, ball_pts, ser, paddle0_pts, paddle1_pts):
+    global direction, position_sent
+    corner_marge = 50
+    filtered_pts = []
+    oscillation_amplitude = 60  
+    oscillation_duration = 0.5
+    oscillation_step_time = 0.2
+    if len(ball_pts) < 2:
+        return
+    last_time, last_pos = ball_pts[0]
+    filtered_pts.append((last_time, last_pos))
+    for times, pos in ball_pts:
+        if last_time - times >= 0.1:
+            filtered_pts.append((times, pos))
+            last_time = times
+    if len(filtered_pts) < 2:
+        return
+    (time2, (x2, y2)), (time1, (x1, y1)) = filtered_pts[0], filtered_pts[1]
+    dx = x2 - x1
+    dy = y2 - y1
+
+    dt = time2 - time1
+    
+    if (dx < 0 and direction == 1) or (dx > 0 and direction == 0):
+        direction = 1 if dx > 0 else 0
+        position_sent = False
+        ball_pts.clear()
+        return
+    elif (direction == -1):
+        direction = 1 if dx > 0 else 0
+    vx = dx / dt
+    vy = dy / dt
+    if vx == 0 and vy == 0:
+        return
+    t_left = t_right = t_top = t_bottom = float('inf')
+    if vx != 0:
+        if vx > 0:
+            t_right = (width - x2) / vx
+        else:
+            t_left = -x2 / vx
+    if vy != 0:
+        if vy > 0:
+            t_bottom = (height - y2) / vy
+        else:
+            t_top = -y2 / vy
+    t_min = min(filter(lambda t: t > 0, [t_left, t_right, t_top, t_bottom]))
+    final_x = x2 + int(vx * t_min)
+    final_y = y2 + int(vy * t_min)
+    final_y = max(0, min(height, final_y))
+    if (dt == 0 or (abs(dx) < 5) or (abs(dy)< 5)):
+        final_y = last_pos[1]
+        final_x = last_pos[0]
+        t_min = 0
+        direction = 1 if final_x > 300 else 0
+    cv2.line(frame, (x2, y2), (final_x, final_y), (255, 0, 0), 2)
+    cv2.imshow('frame', frame)
+    cv2.waitKey(1) 
+    paddle_pts = paddle0_pts if direction == 0 else paddle1_pts
+    if len(paddle_pts) == 0:
+        return 
+    last_paddle_y = paddle_pts[0][1]
+    target_position = final_y if direction == 1 else height - final_y
+    target_position *= pixel_to_motor_coords
+    if not position_sent and t_min <= move_urgent_time and (final_x <= 0 + corner_marge or final_x >= width - corner_marge):
+        start_oscillation_time = time.time()
+        end_oscillation_time = start_oscillation_time + oscillation_duration
+        current_time = start_oscillation_time
+        toggle = True
+        current_motor_position = last_paddle_y * pixel_to_motor_coords if direction == 1 else (height - last_paddle_y)*pixel_to_motor_coords
+        beyond_ball_position = (target_position + oscillation_amplitude) if (current_motor_position < target_position) else (target_position - oscillation_amplitude)
+        before_ball_position = (target_position - oscillation_amplitude) if (current_motor_position < target_position) else (target_position + oscillation_amplitude)
+        while current_time <= end_oscillation_time:
+            if toggle:
+                new_position = beyond_ball_position
+            else:
+                new_position = before_ball_position 
+            new_position = int(check_position(new_position))
+            ser.write(f"game {direction} {new_position}\n".encode())
+            time.sleep(oscillation_step_time)
+            toggle = not toggle
+            current_time = time.time()
+        position_sent = True
+
 def goal(ball_pts, ser):
     global goal_sent
-    goal_threshold = 50
+    goal_threshold = 200
     if len(ball_pts) >= 2:
         last_position = ball_pts[0][1]
         second_last_position = ball_pts[1][1]
         dx = last_position[0] - second_last_position[0]
         if dx < 0 and last_position[0] <= goal_threshold:  # Moving towards paddle 1
-            ser.write("goal 0\n".encode())
+            ser.write("goal 1\n".encode())
             print("goal 0")
             goal_sent = True
         elif dx > 0 and last_position[0] >= width - goal_threshold:  # Moving towards paddle 2
-            ser.write("goal 1\n".encode())
+            ser.write("goal 0\n".encode())
             print("goal 1")
             goal_sent = True
 
@@ -382,5 +391,17 @@ def identify_triangle(contours, frame, isleft):
         cv2.drawContours(frame, [adjusted_cnt], -1, (0, 255, 0), 2)
         cv2.circle(frame, (adjusted_cx, cy), 5, (0, 0, 255), -1)
     return best_center
+
+def create_transformation_matrix(src_points, dst_points):
+    """Create a perspective transformation matrix from src_points to dst_points."""
+    return cv2.getPerspectiveTransform(src_points, dst_points)
+
+def check_position(position):
+    if position < 0:
+        return 0
+    elif position > 1023:
+        return 1023
+    return position
+
 
 main()
