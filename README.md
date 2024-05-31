@@ -145,32 +145,41 @@ To make wiring easier, we chose to use a shield board.
 
 ## General Assembly
 First, laser cut and 3D print the necessary parts.
-To laser cut:
+To laser cut for the [main box](https://github.com/epfl-cs358/2024sp-robopong/tree/main/cad/full%20box):
 - Box walls
-- 2x potentiometer case walls
 - Game board (from black plexiglass)
-
   
-To 3D print:
+To 3D print for the [main box](https://github.com/epfl-cs358/2024sp-robopong/tree/main/cad/full%20box):
 - 2x paddle-belt-rail attachment system
          - paddle load bearing mount
          - paddle (ensure top of paddle is red, everything else is black)
          - 2x belt attachments
 - Gutter system
+         - 2x long gutter
+         - 2x middle gutter
+         - 2x short gutter
+         - 1x output  gutter
 - Collection bowl
-- 2x joystick rails and joystick
-- 6x wall liner in black TPU
-- 2x pulleys
+- 6x [wall liner in black TPU](https://github.com/epfl-cs358/2024sp-robopong/blob/main/cad/periphery/bouncy_wall_liner.3mf)
+- 2x belt bearing
 - 2x motor encoder case
 - 2x backing plates for buttons
 - 2x motor reduction gears
 - 2x magnet case
-- 2x rail holders
+- 2x rail to box mounts
 - Arduino Mega mount
 - Power supply mount
-- Camera mount
+- C270 camera mount
 - Screen mount
 
+To laser cut for the each [potentiometer](https://github.com/epfl-cs358/2024sp-robopong/tree/main/cad/joystick):
+- Joystick case walls
+
+To 3D print for each [potentiometer](https://github.com/epfl-cs358/2024sp-robopong/tree/main/cad/joystick):
+- 2x linear rails
+- Joystick slider
+- Bottom half of joystick handle
+- Top half of joystick handle
 
 First, assemble the game board shell using the laser cut walls as shown in the 3D model (exploded view in [cad/README.md](https://github.com/epfl-cs358/2024sp-robopong/tree/main/cad)). Leave the outermost walls on the left and right side to attach after motor assembly. 
 
@@ -207,11 +216,11 @@ pinching the belt into the notch, and turning a screw down the center.
 <img width="307" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/fdaba931-94b2-405d-add4-9799321feed9">
 
 
-To insert the rails, first screw the rail holder into the side of the box with the corresponding screw holes. Push both rails through the rail holders attached to the box wall and clamp with screws.
+To insert the rails, first screw the rail-to-box mount into the side of the box with the corresponding screw holes. Push both rails through the rail/box mount attached to the box wall and clamp with screws.
 
 <img width="310" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/b3215e7b-6e87-4bed-84d4-d2ebe5ebd1cf">
 
-Continue pushing the rails through the paddle mount with linear bearings and the corresponding rail holes on the opposite side of the game board. Loop the belt around the motor reduction gear and opposing pulley and attach the other end of the belt to the paddle mount with the belt attachment similar to before. 
+Continue pushing the rails through the paddle mount with linear bearings and the corresponding rail holes on the opposite side of the game board. Loop the belt around the motor reduction gear and opposing belt bearing and attach the other end of the belt to the paddle mount with the belt attachment similar to before. 
 
 ![IMG_5697](https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/92d9592b-a03e-4a8a-a4d6-5f93776a6622)
 
@@ -261,6 +270,8 @@ The top half of the joystick can then be glued on, forming the complete handle.
 On the top plate, screw in both rails leaving one screw undone. Insert the slider between the rails, and secure the final screw. 
 
 <img width="425" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/f7583d82-614f-41b7-afa4-805d3afd1bbf">
+
+<img width="617" alt="image" src="https://github.com/epfl-cs358/2024sp-robopong/assets/69027178/fc4da5fc-7c57-4637-8260-b346b81e7bf6">
 
 Then, attach the potentiometer to the joystick and screw the potentiometer into the top plate. Feed the potentiometer wires through the hole in the back of the box, and connect to the Arduino as mentioned above. 
 
