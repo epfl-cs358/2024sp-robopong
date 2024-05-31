@@ -167,9 +167,9 @@ void loop()
     lcd.setCursor(0,1);
     lcd.print("Continue?");
     for (int i = 0; i <10; i++) {
-        digitalWrite(LED_PIN_1, HIGH);
+        digitalWrite(LED_PIN_2, HIGH);
         delay(100);
-        digitalWrite(LED_PIN_1, LOW);
+        digitalWrite(LED_PIN_2, LOW);
         delay(100);
     }
   } else if (rScore == 5) {
@@ -179,9 +179,9 @@ void loop()
     lcd.setCursor(0,1);
     lcd.print("Continue?");
     for (int i = 0; i < 10; i++) {
-      digitalWrite(LED_PIN_2, HIGH);
+      digitalWrite(LED_PIN_1, HIGH);
       delay(100);
-      digitalWrite(LED_PIN_2, LOW);
+      digitalWrite(LED_PIN_1, LOW);
       delay(100);
     }
   }
@@ -391,15 +391,16 @@ void calibrateMotors(){
       motor = command_received.substring(4, 5).toInt();
       command = command_received.substring(6);
     }
+    float calibration_speed = 200;
 
     if(command.equals("up")){
       if (motor == 0) {
         position0 += STEP_INCREMENT;
-        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position0, 100));
+        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position0, calibration_speed));
       }
       else if (motor == 1) {
         position1 += STEP_INCREMENT;
-        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position1, 100));
+        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position1, calibration_speed));
       }
       command_received = "";
       command = "";
@@ -407,11 +408,11 @@ void calibrateMotors(){
     else if (command.equals("down")){
       if (motor == 0) {
         position0 -= STEP_INCREMENT;
-        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position0, 100));
+        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position0, calibration_speed));
       }
       else if (motor == 1) {
         position1 -= STEP_INCREMENT;
-        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position1, 100));
+        sendCommandToMotor(getMotorSerial(motor), moveMotorCommand(position1, calibration_speed));
       }
       command_received = "";
       command = "";
