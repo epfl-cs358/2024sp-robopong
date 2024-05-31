@@ -13,7 +13,7 @@ move_urgent_time = 0.35
 paddle_min_area = 10
 board_top_limit = 41
 
-# not touch
+# Ball and paddle color ranges
 redRange = [(160, 50, 50), (180, 255, 255)] # paddles
 blueRange = [(40, 150, 200), (100, 255, 255)] # ball
 
