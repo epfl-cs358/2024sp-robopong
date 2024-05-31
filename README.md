@@ -152,8 +152,12 @@ To laser cut:
 
   
 To 3D print:
-- 2x paddle-belt-rail system (includes one paddle mount, one paddle, two belt attachments, make sure top of paddle is red everything else is black)
+- 2x paddle-belt-rail attachment system
+         - paddle load bearing mount
+         - paddle (ensure top of paddle is red, everything else is black)
+         - 2x belt attachments
 - Gutter system
+- Collection bowl
 - 2x joystick rails and joystick
 - 6x wall liner in black TPU
 - 2x pulleys
@@ -266,11 +270,11 @@ For the camera, first insert the metal rod through the corresponding holes on th
 
 Attach the camera to the printed hinge mount and push this mount onto the top of the metal rod. Secure the rod in place.
 
-Once all wiring is complete, attach the Arduino Mega to its mount and secure the mount to the bottom of the board. Place the power supply brick in its mount and secure to the bottom of the board as well. Glue the gutter system together and fit it along the inside walls of the game box. The game board can now be inserted, the wall linings attached, paddles clipped in, and the product is ready to play. 
+Once all wiring is complete, attach the Arduino Mega to its mount and secure the mount to the bottom of the board. Place the power supply brick in its mount and secure to the bottom of the board as well. Glue the gutter system together and fit it along the inside walls of the game box and attach the collection bowl to the front of the box. The game board can now be inserted, the wall linings attached, paddles clipped in, and the product is ready to play. 
 
 ### Game and Computer Vision
 
-To play the game, we must first launch the Python computer vision code. The Arduino should be connected to the laptop, and the port used should be specified in the first line of the main method. Currently, it is set to COM5. The camera must be connected to any USB port on the laptop.
+To play the game, we must first launch the Python computer vision code. The Arduino should be connected to the laptop, and the port used should be specified in the first line of the main method. The camera must be connected to any USB port on the laptop.
 
 Once the code is launched, it starts by calibrating the camera: it first detects the four Aruco Markers and then computes the transformation matrix for the frame. Next, motor calibration takes place by detecting the red triangular-shaped paddles. The system sends "Go UP" and "Go DOWN" commands to the Arduino through the serial port. Once the boundaries are reached, a stop command is sent to the Arduino. This step is crucial to establish concrete bounds of the board and to save the zero and maximum positions of each motor.
 
